@@ -108,9 +108,9 @@ class ChamferEvaluator(BaseEvaluator):
             webpage.add_images(images, texts, links=links, height=400)
 
             # gather visuals
-            images = [edited_edge[...,None].repeat(3, axis=-1), target_edge[...,None].repeat(3, axis=-1)]
+            images = [edited_edge[..., None].repeat(3, axis=-1), target_edge[..., None].repeat(3, axis=-1)]
             for vis, vis_key in zip(images, visuals_keys):
-                visuals[f'{self.target_phase}_{vis_key}'].append(vis)            
+                visuals[f'{self.target_phase}_{vis_key}'].append(vis)
 
         # update metrics/visuals and save the webpage
         edge_net.to('cpu')
@@ -146,7 +146,7 @@ def non_maximum_suppression(image, angles):
                 value_to_compare = max(image[i - 1, j], image[i + 1, j])
             else:
                 value_to_compare = max(image[i + 1, j - 1], image[i - 1, j + 1])
-            
+
             if image[i, j] >= value_to_compare:
                 suppressed[i, j] = image[i, j]
     suppressed = np.multiply(suppressed, 255.0 / suppressed.max())
@@ -165,7 +165,7 @@ def double_threshold_hysteresis(image, low, high):
     dx = np.array((-1, -1, 0, 1, 1, 1, 0, -1))
     dy = np.array((0, 1, 1, 1, 0, -1, -1, -1))
     size = image.shape
-    
+
     while len(strong_x):
         x = strong_x[0]
         y = strong_y[0]
@@ -174,7 +174,7 @@ def double_threshold_hysteresis(image, low, high):
         for direction in range(len(dx)):
             new_x = x + dx[direction]
             new_y = y + dy[direction]
-            if((0 <= new_x < size[0] and 0 <= new_y < size[1]) and (result[new_x, new_y]  == weak)):
+            if((0 <= new_x < size[0] and 0 <= new_y < size[1]) and (result[new_x, new_y] == weak)):
                 result[new_x, new_y] = strong
                 np.append(strong_x, new_x)
                 np.append(strong_y, new_y)
@@ -194,7 +194,7 @@ def process_edge(edge):
 
     edge = non_maximum_suppression(edge, angles)
     edge = double_threshold_hysteresis(edge, 100, 150) == 255
-    
+
     edge = remove_small_objects(edge, min_size=5, connectivity=2)
 
     return ((1 - edge) * 255).astype(np.uint8)

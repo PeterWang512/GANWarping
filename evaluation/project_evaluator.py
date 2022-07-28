@@ -83,7 +83,7 @@ class ProjectEvaluator(BaseEvaluator):
             metrics[f'{self.target_phase}_psnr'].append(psnr)
             metrics[f'{self.target_phase}_ssim'].append(ssim)
             metrics[f'{self.target_phase}_lpips'].append(lpips)
-        
+
         # update metrics/visuals and save the webpage
         lpips_metric.close()
         metrics = {k: np.mean(v) for k, v in metrics.items()}

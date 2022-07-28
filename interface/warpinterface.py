@@ -41,7 +41,7 @@ def warp_by_keypoints(image, keypoints, interp=cv2.INTER_CUBIC):
 
     deform = mls_affine_deformation(vx, vy, src, tgt, alpha=1)
     deform = np.array(deform)
-    idx_i, idx_j = tgt[:,1].astype(int), tgt[:,0].astype(int)
+    idx_i, idx_j = tgt[:, 1].astype(int), tgt[:, 0].astype(int)
     deform[:, idx_i, idx_j] = src[:, ::-1].T
 
     dx, dy = deform[1], deform[0]
@@ -53,6 +53,8 @@ def warp_by_keypoints(image, keypoints, interp=cv2.INTER_CUBIC):
 
 
 status = Property('Press the button to save the image.')
+
+
 class WarpInterface:
     def __init__(self, model_pkl_path, truncation, seed, save_dir, crop_car=False, stylegan_repo='./models/networks/stylegan3'):
         self.trunc = truncation
@@ -73,7 +75,7 @@ class WarpInterface:
         print('Loading networks from "%s"...' % model_pkl_path)
         self.device = torch.device('cuda')
         with dnnlib.util.open_url(model_pkl_path) as fp:
-            self.G = legacy.load_network_pkl(fp)['G_ema'].requires_grad_(False).to(self.device) # type: ignore
+            self.G = legacy.load_network_pkl(fp)['G_ema'].requires_grad_(False).to(self.device)  # type: ignore
 
         # sampling noises based on a fixed seed
         num_samples = 1000
@@ -120,7 +122,8 @@ class WarpInterface:
 
     # warp the images
     def changed(self, c):
-        if len(self.V.keypt) < 3: return
+        if len(self.V.keypt) < 3:
+            return
         warped = warp_by_keypoints(self.V.source, self.V.keypt)
         self.V.image_warped = as_url(warped)
 
@@ -148,7 +151,7 @@ class WarpInterface:
         t = int(t) if t else 0
         f.seek(0)
         f.truncate()
-        f.write(str(t+1))
+        f.write(str(t + 1))
         f.truncate()
         f.close()
 
@@ -165,7 +168,7 @@ class WarpInterface:
         np.save(save_pt_path, self.V.keypt[4:])
 
         status.set(f'warped image saved at: {save_im_path}\n'
-                        f'keypoints saved at: {save_pt_path}')
+                   f'keypoints saved at: {save_pt_path}')
 
     @torch.no_grad()
     def sample_image(self, ind, save_ind):
@@ -174,7 +177,7 @@ class WarpInterface:
         img = self.G(z, None, truncation_psi=self.trunc)
         w_init = self.G.mapping(z, None, truncation_psi=self.trunc)
 
-        img_pil = (img + 1) * (255/2)
+        img_pil = (img + 1) * (255 / 2)
         img_pil = img_pil.permute(0, 2, 3, 1).clamp(0, 255).to(torch.uint8)[0].cpu().numpy()
         img_pil = Image.fromarray(img_pil)
 

@@ -49,7 +49,7 @@ class SampleEvaluator(BaseEvaluator):
         # samples from the original model
         images_orig = []
         for start in range(0, N, B):
-            end = min(N, start+B)
+            end = min(N, start + B)
             images_orig.append(ref_G(z[start:end], None, truncation_psi=trunc))
         images_orig = torch.cat(images_orig, dim=0)
         images_orig = util.tensor2im(images_orig, tile=False, normalize=True)
@@ -62,7 +62,7 @@ class SampleEvaluator(BaseEvaluator):
         # samples from the edited model
         images_mod = []
         for start in range(0, N, B):
-            end = min(N, start+B)
+            end = min(N, start + B)
             images_mod.append(new_G(z[start:end], None, truncation_psi=trunc))
         images_mod = torch.cat(images_mod, dim=0)
         images_mod = util.tensor2im(images_mod, tile=False, normalize=True)

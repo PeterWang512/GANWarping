@@ -1,8 +1,9 @@
+import legacy
+import dnnlib
 import os
 import re
 import sys
 import copy
-from cv2 import exp
 import torch
 import numpy as np
 from PIL import Image
@@ -10,8 +11,6 @@ from . import show, labwidget
 
 stylegan_path = './models/networks/stylegan3'
 sys.path.append(stylegan_path)
-import dnnlib
-import legacy
 
 
 ##########################################################################
@@ -19,6 +18,8 @@ import legacy
 ##########################################################################
 
 export_text = labwidget.Property(f"Welcome to GAN Warping!")
+
+
 class GANWarpingApp(labwidget.Widget):
     def __init__(self, modelbase, modeldir, savedir='exported_weights', size=256, num_samples=9, num_pages=5, seed=3000, trunc=1.0, icon_seed=6000, device='cuda'):
         super().__init__(className='rwa',
@@ -49,8 +50,8 @@ class GANWarpingApp(labwidget.Widget):
         self.icon_z = self.get_noise_z(1, self.orig_gen.z_dim, icon_seed, device)
 
         reset_sty = dict(margin='auto', background='#AA00CF')
-        sample_sty = {'display':'inline', 'background':'#0088DD', 'vertical-align': 'bottom', 'margin-left': 'auto', 'margin-right': '0'}
-        export_sty = {'display':'inline', 'background':'#DD8800', 'vertical-align': 'bottom', 'margin-left': 'auto', 'margin-right': '0'}
+        sample_sty = {'display': 'inline', 'background': '#0088DD', 'vertical-align': 'bottom', 'margin-left': 'auto', 'margin-right': '0'}
+        export_sty = {'display': 'inline', 'background': '#DD8800', 'vertical-align': 'bottom', 'margin-left': 'auto', 'margin-right': '0'}
         self.reset_btn = labwidget.Button('Reset', reset_sty).on('click', self.reset_sliders)
         self.sample_btn = labwidget.Button('More samples', style=sample_sty).on('click', self.change_noise)
         self.export_btn = labwidget.Button('Export', style=export_sty).on('click', self.export_model)
@@ -69,7 +70,7 @@ class GANWarpingApp(labwidget.Widget):
 
     def get_gen_model(self, modelbase, device):
         with dnnlib.util.open_url(modelbase) as fp:
-            G = legacy.load_network_pkl(fp)['G_ema'].requires_grad_(False).to(device) # type: ignore
+            G = legacy.load_network_pkl(fp)['G_ema'].requires_grad_(False).to(device)  # type: ignore
         return G
 
     def collect_model_weights(self, modeldir, device):
@@ -110,14 +111,14 @@ class GANWarpingApp(labwidget.Widget):
             setattr(self, f'slider{idx}_on', False)
             setattr(self, f'slider{idx}_scale', 1)
             icon.style = {'opacity': 0.2, 'width': '135px', 'height': '135px'}
-            scale_range.style = {'display':'inline', 'pointer-events':'none', 'opacity': 0.2}
+            scale_range.style = {'display': 'inline', 'pointer-events': 'none', 'opacity': 0.2}
 
         self.update_model()
 
     @torch.no_grad()
     def refresh_images(self):
         images = self.curr_gen(self.noise_z, None, truncation_psi=self.trunc)
-        images = (images + 1) * (255/2)
+        images = (images + 1) * (255 / 2)
         images = images.permute(0, 2, 3, 1).clamp(0, 255).to(torch.uint8).cpu().numpy()
         for idx, img in enumerate(images):
             img_pil = Image.fromarray(img)
@@ -157,8 +158,8 @@ class GANWarpingApp(labwidget.Widget):
                 state_dict[name].copy_(param)
 
             # create icons
-            icon = edit_gen(self.icon_z, None, truncation_psi=self.trunc)[0]      
-            icon = ((icon + 1) * (255/2)).permute(1, 2, 0).clamp(0, 255).to(torch.uint8).cpu().numpy()
+            icon = edit_gen(self.icon_z, None, truncation_psi=self.trunc)[0]
+            icon = ((icon + 1) * (255 / 2)).permute(1, 2, 0).clamp(0, 255).to(torch.uint8).cpu().numpy()
             icon = Image.fromarray(icon)
 
             # setup individual slider for each model
@@ -171,11 +172,11 @@ class GANWarpingApp(labwidget.Widget):
     def create_model_slider(self, icon_image, idx):
         # set up the widgets for the slider
         slider = labwidget.Div()
-        
+
         icon = labwidget.Image(style={'opacity': 0.2, 'width': '135px', 'height': '135px'}).on('click', self.toggle_model_from_idx(idx))
         icon.render(icon_image)
 
-        scale_range_style = {'pointer-events':'none', 'opacity': 0.2, 'width': '135px'}
+        scale_range_style = {'pointer-events': 'none', 'opacity': 0.2, 'width': '135px'}
         scale = labwidget.Property(1.0)
         scale_range = labwidget.Range(value=scale, min=0, max=1, step=0.01, style=scale_range_style)
         slider.show([icon, scale_range])
@@ -204,7 +205,7 @@ class GANWarpingApp(labwidget.Widget):
             if on:
                 setattr(self, f'slider{idx}_on', False)
                 icon.style = {'opacity': 0.2, 'width': '135px', 'height': '135px'}
-                scale_range.style = {'pointer-events':'none', 'opacity': 0.2, 'width': '135px'}
+                scale_range.style = {'pointer-events': 'none', 'opacity': 0.2, 'width': '135px'}
             else:
                 setattr(self, f'slider{idx}_on', True)
                 icon.style = {'width': '135px', 'height': '135px'}

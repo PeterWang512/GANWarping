@@ -469,6 +469,7 @@ class Event(object):
     Event object holds a main value, and it also informs the callback
     about the property name and the Widget object that is notifying.
     '''
+
     def __init__(self, value, name, target, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
@@ -954,7 +955,7 @@ class Gamut(Widget):
         super().__init__()
         assert color.value is None
         self.color = Property(color)
-        self.palette = Property("#00ff00") # default green
+        self.palette = Property("#00ff00")  # default green
 
     def change_palette(self, palette):
         self.palette = palette
@@ -1045,7 +1046,7 @@ def css_style_from_dict(d):
     return ';'.join(
         re.sub('([A-Z]+)', r'-\1', k).lower() + ':' +
         # re.sub('([][\\!"$%&\'()*+,./:;<=>?@^`{|}~])', r'\\\1', str(v))
-        re.sub('([][\\!"$%&\'()*+,/:;<=>?@^`{|}~])', r'\\\1', str(v)) # removed . to make floating point work
+        re.sub('([][\\!"$%&\'()*+,/:;<=>?@^`{|}~])', r'\\\1', str(v))  # removed . to make floating point work
         for k, v in d.items())
 
 

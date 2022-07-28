@@ -3,28 +3,29 @@ from .labwidget import Widget, Gamut, Range, Textbox, Property
 
 
 class PaintWidget(Widget):
-  def __init__(self,
-          width=256, height=256,
-          image='', mask='', brushsize=10.0, stroke_color=None, oneshot=False, disabled=False):
-    super().__init__()
-    self.mask = Property(mask)
-    self.image = Property(image)
-    self.brushsize = Property(brushsize)
-    self.stroke_color = Property(stroke_color)
-    self.erase = Property(False)
-    self.oneshot = Property(oneshot)
-    self.disabled = Property(disabled)
-    self.width = Property(width)
-    self.height = Property(height)
+    def __init__(self,
+                 width=256, height=256,
+                 image='', mask='', brushsize=10.0, stroke_color=None, oneshot=False, disabled=False):
+        super().__init__()
+        self.mask = Property(mask)
+        self.image = Property(image)
+        self.brushsize = Property(brushsize)
+        self.stroke_color = Property(stroke_color)
+        self.erase = Property(False)
+        self.oneshot = Property(oneshot)
+        self.disabled = Property(disabled)
+        self.width = Property(width)
+        self.height = Property(height)
 
-  def widget_js(self):
-    return f'''
+    def widget_js(self):
+        return f'''
       {PAINT_WIDGET_JS}
       var pw = new PaintWidget(element, model);
     '''
-  def widget_html(self):
-    v = self.view_id()
-    return f'''
+
+    def widget_html(self):
+        v = self.view_id()
+        return f'''
     <style>
     #{v} {{ position: relative; display: inline-block; }}
     #{v} .paintmask {{
@@ -38,6 +39,7 @@ class PaintWidget(Widget):
       <button id="clear_button" type="button">reset</button>
     </div>
     '''
+
 
 PAINT_WIDGET_JS = """
 class PaintWidget {
@@ -145,7 +147,7 @@ class PaintWidget {
     this.undo_button = document.getElementById('undo_button');
     this.undo_button.addEventListener('click',
         this.undo_step.bind(this));
-  
+
     this.clear_button = document.getElementById('clear_button');
     this.clear_button.addEventListener('click',
         this.clear_canvas.bind(this));
@@ -166,7 +168,7 @@ class PaintWidget {
     }
     ctx.globalCompositeOperation = (
         erase ? "destination-out" : 'source-over');
-    
+
     var color = model.get('stroke_color');
     if (color == null) {
       ctx.fillStyle = "gray";
@@ -213,29 +215,29 @@ class PaintWidget {
 
 
 class ColorPaintWidget(Widget):
-  def __init__(self,
-               width=256, height=256,
-               image='', mask='', brushsize=10.0, stroke_color=None, oneshot=False, disabled=False):
-    super().__init__()
-    s_color = Property(stroke_color)
-    b_size = Property(brushsize)
-    self.gamut = Gamut(s_color)
-    self.brushtext = Textbox(b_size)
-    self.brushrange = Range(value=b_size, min=1, max=100)
-    self.paint = PaintWidget(width, height, image, mask, b_size, s_color, oneshot, disabled)
-    self.stroke_color = s_color
-    self.brushsize = b_size
+    def __init__(self,
+                 width=256, height=256,
+                 image='', mask='', brushsize=10.0, stroke_color=None, oneshot=False, disabled=False):
+        super().__init__()
+        s_color = Property(stroke_color)
+        b_size = Property(brushsize)
+        self.gamut = Gamut(s_color)
+        self.brushtext = Textbox(b_size)
+        self.brushrange = Range(value=b_size, min=1, max=100)
+        self.paint = PaintWidget(width, height, image, mask, b_size, s_color, oneshot, disabled)
+        self.stroke_color = s_color
+        self.brushsize = b_size
 
-  def change_palette(self, palette):
-    self.gamut.change_palette(palette)
-  
-  def set_image(self, image):
-    self.paint.image = pil_to_url(image)
-  
-  def widget_html(self):
-    def h(w):
-        return w._repr_html_()
-    return f'''
+    def change_palette(self, palette):
+        self.gamut.change_palette(palette)
+
+    def set_image(self, image):
+        self.paint.image = pil_to_url(image)
+
+    def widget_html(self):
+        def h(w):
+            return w._repr_html_()
+        return f'''
       <div>
         {h(self.gamut)}
         <div style="display:inline-block;vertical-align:120%;">Brush Size:</div>

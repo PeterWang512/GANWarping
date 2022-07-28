@@ -65,7 +65,7 @@ class PixelErrorEvaluator(BaseEvaluator):
 
             # get target mask
             target_mask = dset.data['target_masks'][i]
-            changed_mask = target_mask.cpu().numpy()[...,None]
+            changed_mask = target_mask.cpu().numpy()[..., None]
             unchanged_mask = 1 - changed_mask
             overlay_np = ((changed_mask * 0.5 + 0.5) * edited_np).astype(np.uint8)
             overlay_im = Image.fromarray(overlay_np)
@@ -116,7 +116,7 @@ class PixelErrorEvaluator(BaseEvaluator):
             emaps_np = [np.asarray(emap).copy() for emap in [l1_errormap_pt, l1_emap_changed, l1_emap_unchanged, lpips_errormap]]
             images = [orig_np, edited_np, target_np, overlay_np] + emaps_np
             for vis, vis_key in zip(images, visuals_keys):
-                visuals[f'{self.target_phase}_{vis_key}'].append(vis)            
+                visuals[f'{self.target_phase}_{vis_key}'].append(vis)
 
         # update metrics/visuals and save the webpage
         lpips_metric.close()

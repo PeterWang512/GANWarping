@@ -27,8 +27,8 @@ def morphological_open(mask, kernel_size):
 
 
 def preprocess_mask(mask_np):
-    color_np = mask_np[...,:3].copy()
-    drawn = mask_np[...,-1] == 255
+    color_np = mask_np[..., :3].copy()
+    drawn = mask_np[..., -1] == 255
     # get background mask, clean up with morphological closing
     background_mask = np.all(color_np == 128, axis=-1).astype(np.uint8)
     background_mask = morphological_close(background_mask, 5)
@@ -37,7 +37,7 @@ def preprocess_mask(mask_np):
     color_mask = drawn & morphological_open(color_mask, 5)
     # only keep colors from the color mask
     color_np = color_np * color_mask[..., None]
-    
+
     return {
         'color': color_np,
         'color_mask': color_mask,
@@ -46,6 +46,8 @@ def preprocess_mask(mask_np):
 
 
 status = Property('Press the button to save the image.')
+
+
 class ColorInterface:
     def __init__(self, model_pkl_path, truncation, seed, save_dir, stylegan_repo='./models/networks/stylegan3'):
         self.trunc = truncation
@@ -65,7 +67,7 @@ class ColorInterface:
         print('Loading networks from "%s"...' % model_pkl_path)
         self.device = torch.device('cuda')
         with dnnlib.util.open_url(model_pkl_path) as fp:
-            self.G = legacy.load_network_pkl(fp)['G_ema'].requires_grad_(False).to(self.device) # type: ignore
+            self.G = legacy.load_network_pkl(fp)['G_ema'].requires_grad_(False).to(self.device)  # type: ignore
 
         # sampling noises based on a fixed seed
         num_samples = 1000
@@ -109,7 +111,7 @@ class ColorInterface:
     def changed(self):
         global prev_color, prev_palette
         if self.V.stroke_color == self.prohibited_color:
-            self.V.prop('stroke_color').value = prev_color # hack to avoid infinite loop
+            self.V.prop('stroke_color').value = prev_color  # hack to avoid infinite loop
             self.V.change_palette(prev_palette)
             status.set(f'Color {self.prohibited_color} is reserved for fixed background.')
         else:
@@ -137,7 +139,7 @@ class ColorInterface:
         t = int(t) if t else 0
         f.seek(0)
         f.truncate()
-        f.write(str(t+1))
+        f.write(str(t + 1))
         f.truncate()
         f.close()
 
@@ -159,7 +161,7 @@ class ColorInterface:
         img = self.G(z, None, truncation_psi=self.trunc)
         w_init = self.G.mapping(z, None, truncation_psi=self.trunc)
 
-        img_pil = (img + 1) * (255/2)
+        img_pil = (img + 1) * (255 / 2)
         img_pil = img_pil.permute(0, 2, 3, 1).clamp(0, 255).to(torch.uint8)[0].cpu().numpy()
         img_pil = Image.fromarray(img_pil)
 

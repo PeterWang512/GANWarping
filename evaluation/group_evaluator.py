@@ -2,6 +2,7 @@ import torch
 from .base_evaluator import BaseEvaluator
 import util
 
+
 def find_evaluator_using_name(filename):
     target_class_name = filename
     module_name = 'evaluation.' + filename

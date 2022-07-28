@@ -26,7 +26,7 @@ class RewriteModel(torch.nn.Module):
         super().__init__()
         self.opt = opt
         self.rank = opt.rank
-        self.device = 'cuda' if self.opt.num_gpus > 0 else 'cpu' #TODO Cleaner way to do this needed, currently need this member still
+        self.device = 'cuda' if self.opt.num_gpus > 0 else 'cpu'  # TODO Cleaner way to do this needed, currently need this member still
         self.netG = self.initialize_networks(opt).to(self.device)
 
         # setup layers of interest
@@ -41,8 +41,8 @@ class RewriteModel(torch.nn.Module):
         else:
             ind = int(opt.update_layers)
             start, end = ind, ind
-        self.update_layers = slice_ordered_dict(module_dict, start, end+1)
-        self.key_res = in_sizes[start:end+1]
+        self.update_layers = slice_ordered_dict(module_dict, start, end + 1)
+        self.key_res = in_sizes[start:end + 1]
 
         # setup target layer for supervision
         if opt.target_layer == 'output':
@@ -50,7 +50,7 @@ class RewriteModel(torch.nn.Module):
             self.target_res = self.netG.img_resolution
         else:
             ind = int(opt.target_layer)
-            self.target_layer = slice_ordered_dict(module_dict, ind, ind+1)
+            self.target_layer = slice_ordered_dict(module_dict, ind, ind + 1)
             self.target_res = out_sizes[ind]
 
         if self.opt.isTrain:
@@ -151,10 +151,10 @@ class RewriteModel(torch.nn.Module):
     def print_trainable_params(self):
         param_names = list(self.update_params)
         self.logprint(
-            '\n' + \
-            '-------------- Trainables ---------------\n' + \
-            '(Trainable parameters)\n' + \
-            '\n'.join(param_names) + \
+            '\n' +
+            '-------------- Trainables ---------------\n' +
+            '(Trainable parameters)\n' +
+            '\n'.join(param_names) +
             '\n----------------- End -------------------'
         )
 

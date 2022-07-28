@@ -1,6 +1,4 @@
-import copy
 import torch
-from os.path import join
 
 import models.networks as networks
 from lib.dissect.nethook import Trace
@@ -32,7 +30,7 @@ class ReferenceModel(torch.nn.Module):
             self.target_res = self.netG.img_resolution
         else:
             ind = int(opt.target_layer)
-            self.target_layer = slice_ordered_dict(module_dict, ind, ind+1)
+            self.target_layer = slice_ordered_dict(module_dict, ind, ind + 1)
             self.target_res = out_sizes[ind]
 
     def forward(self, w_latents, mode):
@@ -73,7 +71,7 @@ class ReferenceModel(torch.nn.Module):
 
     def get_output_res(self):
         """Return the resolution of the output."""
-        return self.netG.img_resolution #TODO: too specific too stylegan
+        return self.netG.img_resolution  # TODO: too specific too stylegan
 
     def get_target_res(self):
         """Return the resolution of the target."""

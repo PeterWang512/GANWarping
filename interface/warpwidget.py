@@ -3,40 +3,41 @@ from .labwidget import Widget, Property
 
 
 class WarpWidget(Widget):
-  def __init__(self,
-          width=256, height=256,
-          image=None, keypt_init=[], brushsize=5.0, oneshot=False, disabled=False):
-    super().__init__()
-    self.keypt = Property(keypt_init)
-    self.keypt_init = Property(keypt_init.copy())
-    # self.image = Property(image)
-    # self.image_warped = Property(image)
-    self.brushsize = Property(brushsize)
-    # self.erase = Property(False)
-    self.oneshot = Property(oneshot)
-    self.disabled = Property(disabled)
-    self.width = Property(width)
-    self.height = Property(height)
+    def __init__(self,
+                 width=256, height=256,
+                 image=None, keypt_init=[], brushsize=5.0, oneshot=False, disabled=False):
+        super().__init__()
+        self.keypt = Property(keypt_init)
+        self.keypt_init = Property(keypt_init.copy())
+        # self.image = Property(image)
+        # self.image_warped = Property(image)
+        self.brushsize = Property(brushsize)
+        # self.erase = Property(False)
+        self.oneshot = Property(oneshot)
+        self.disabled = Property(disabled)
+        self.width = Property(width)
+        self.height = Property(height)
 
-    self.source = None
-    self.image = Property('')
-    self.image_warped = Property('')
-    if image is not None:
-      self.set_new_image(image)
+        self.source = None
+        self.image = Property('')
+        self.image_warped = Property('')
+        if image is not None:
+            self.set_new_image(image)
 
-  def set_new_image(self, image):
-    self.source = image
-    self.image = pil_to_url(image)
-    self.image_warped = pil_to_url(image)
+    def set_new_image(self, image):
+        self.source = image
+        self.image = pil_to_url(image)
+        self.image_warped = pil_to_url(image)
 
-  def widget_js(self):
-    return f'''
+    def widget_js(self):
+        return f'''
       {PAINT_WIDGET_JS}
       var pw = new WarpWidget(element, model);
     '''
-  def widget_html(self):
-    v = self.view_id()
-    return f'''
+
+    def widget_html(self):
+        v = self.view_id()
+        return f'''
     <style>
     #{v} {{ position: relative; display: inline-block; }}
     #{v} .paintkeypt {{
@@ -104,7 +105,7 @@ class WarpWidget {
             '#ff0000');
         self.draw_arrow(sp.x, sp.y, ep.x, ep.y);
         self.cPush();
-        
+
         self.keypt.push([sp.x, sp.y, ep.x, ep.y]);
         self.model.set('keypt', self.keypt);
         return;
@@ -115,7 +116,7 @@ class WarpWidget {
     window.addEventListener('mousemove', track_mouse);
     window.addEventListener('mouseup', track_mouse);
     window.addEventListener('keydown', track_mouse, true);
-  
+
     var sp = self.cursor_position();
       self.fill_circle(sp.x, sp.y,
           self.model.get('brushsize'),
@@ -209,7 +210,7 @@ class WarpWidget {
     this.undo_button = document.getElementById('undo_button');
     this.undo_button.addEventListener('click',
         this.undo_step.bind(this));
-  
+
     this.clear_button = document.getElementById('clear_button');
     this.clear_button.addEventListener('click',
         this.reset_warps.bind(this));
