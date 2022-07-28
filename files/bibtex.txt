@@ -1,0 +1,6 @@
+@article{wang2022rewriting,
+author = {Wang, Sheng-Yu and Bau, David and Zhu, Jun-Yan},
+title = {Rewriting Geometric Rules of a GAN},
+year = {2022},
+journal = {ACM Transactions on Graphics (TOG)}
+}
