@@ -1,5 +1,5 @@
 ## Rewriting Geometric Rules of a GAN
- [**Project**](https://peterwang512.github.io/GANWarping/) | [**Paper**]() | [**Youtube**]()
+ [**Project**](https://peterwang512.github.io/GANWarping/) | [**Paper**]() | [**Youtube**](https://www.youtube.com/watch?v=2m7_rbsO6Hk)
 
 
 <p align="center">
@@ -46,9 +46,6 @@ With our method, a user can edit a GAN model to synthesize many unseen objects w
 
 
 ## Getting Started
-
-### Google Colab
-TBD.
 
 ### Clone our repo
 ```bash
