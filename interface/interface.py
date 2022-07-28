@@ -1,5 +1,3 @@
-import legacy
-import dnnlib
 import os
 import re
 import sys
@@ -11,6 +9,8 @@ from . import show, labwidget
 
 stylegan_path = './models/networks/stylegan3'
 sys.path.append(stylegan_path)
+import legacy
+import dnnlib
 
 
 ##########################################################################
