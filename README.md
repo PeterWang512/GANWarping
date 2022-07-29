@@ -1,5 +1,5 @@
 ## Rewriting Geometric Rules of a GAN
- [**Project**](https://peterwang512.github.io/GANWarping/) | [**Paper**]() | [**Youtube**](https://www.youtube.com/watch?v=2m7_rbsO6Hk)
+ [**Project**](https://peterwang512.github.io/GANWarping/) | [**Paper**](https://arxiv.org/abs/2207.14288) | [**Youtube**](https://www.youtube.com/watch?v=2m7_rbsO6Hk)
 
 
 <p align="center">
@@ -12,7 +12,7 @@ With our method, a user can edit a GAN model to synthesize many unseen objects w
 
 [Sheng-Yu Wang](https://peterwang512.github.io/)<sup>1</sup>, [David Bau](https://baulab.info/)<sup>2</sup>, [Jun-Yan Zhu](https://cs.cmu.edu/~junyanz)<sup>1</sup>.
 <br> CMU<sup>1</sup>, Northeastern University<sup>2</sup>
-<br>In [SIGGRAPH](), 2022.
+<br>In [SIGGRAPH](https://arxiv.org/abs/2207.14288), 2022.
 
 
 
@@ -131,11 +131,13 @@ python test.py -t weights/eval_task
 ```
 
 ## Related Works
-* R. Gal, O. Patashnik, H. Maron, A. Bermano, G. Chechik, D. Cohen-Or. ["StyleGAN-NADA: CLIP-Guided Domain Adaptation of Image Generators."](https://arxiv.org/abs/2108.00946). In SIGGRAPH 2022.
-* D. Bau, S. Liu, T. Wang, J.-Y. Zhu, A. Torralba. ["Rewriting a Deep Generative Model"](https://arxiv.org/abs/2007.15646). In ECCV 2020.
-* S.-Y. Wang, D. Bau, J.-Y. Zhu. ["Sketch Your Own GAN"]([https://arxiv.org/abs/1912.05270](https://arxiv.org/abs/2108.02774)). In ICCV 2021.
 * Y. Nitzan, K. Aberman, Q. He, O. Liba, M. Yarom, Y. Gandelsman, I. Mosseri, Y. Pritch, D. Cohen-or.
  ["MyStyle: A Personalized Generative Prior"](https://arxiv.org/abs/2203.17272). In ArXiv.
+* R. Gal, O. Patashnik, H. Maron, A. Bermano, G. Chechik, D. Cohen-Or. ["StyleGAN-NADA: CLIP-Guided Domain Adaptation of Image Generators."](https://arxiv.org/abs/2108.00946). In SIGGRAPH 2022.
+* S.-Y. Wang, D. Bau, J.-Y. Zhu. ["Sketch Your Own GAN"](https://arxiv.org/abs/2108.02774). In ICCV 2021.
+* D. Bau, S. Liu, T. Wang, J.-Y. Zhu, A. Torralba. ["Rewriting a Deep Generative Model"](https://arxiv.org/abs/2007.15646). In ECCV 2020.
+
+
 
 
 ## Acknowledgments
