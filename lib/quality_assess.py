@@ -1,8 +1,6 @@
 import numpy as np
 import torch
-import scipy
 from scipy import signal
-from scipy.ndimage.filters import convolve
 import lpips
 
 
@@ -32,7 +30,7 @@ def _FSpecialGauss(size, sigma):
         stop -= 1
     x, y = np.mgrid[offset + start:stop, offset + start:stop]
     assert len(x) == size
-    g = np.exp(-((x**2 + y**2)/(2.0 * sigma**2)))
+    g = np.exp(-((x**2 + y**2) / (2.0 * sigma**2)))
     return g / g.sum()
 
 
@@ -46,12 +44,12 @@ def fspecial_gauss(size, sigma):
         stop -= 1
     x, y = np.mgrid[offset + start:stop, offset + start:stop]
     assert len(x) == size
-    g = np.exp(-((x**2 + y**2)/(2.0 * sigma**2)))
+    g = np.exp(-((x**2 + y**2) / (2.0 * sigma**2)))
     return g / g.sum()
 
 
 def ssim(img1, img2, max_val=255, filter_size=11,
-                 filter_sigma=1.5, k1=0.01, k2=0.03, mask=None):
+         filter_sigma=1.5, k1=0.01, k2=0.03, mask=None):
     """
     Original code here: https://github.com/tensorflow/models/blob/f87a58cd96d45de73c9a8330a06b2ab56749a7fa/research/compression/image_encoder/msssim.py
     Return the Structural Similarity Map between `img1` and `img2`.
@@ -78,7 +76,7 @@ def ssim(img1, img2, max_val=255, filter_size=11,
     """
     if img1.shape != img2.shape:
         raise RuntimeError("Input images must have the same shape (%s vs. %s).",
-                                             img1.shape, img2.shape)
+                           img1.shape, img2.shape)
     if img1.ndim == 3:
         img1 = np.expand_dims(img1, 0)
 
@@ -87,7 +85,7 @@ def ssim(img1, img2, max_val=255, filter_size=11,
 
     if img1.ndim != 4:
         raise RuntimeError(
-                "Input images must have four dimensions, not %d", img1.ndim)
+            "Input images must have four dimensions, not %d", img1.ndim)
 
     img1 = img1.astype(np.float64)
     img2 = img2.astype(np.float64)
@@ -127,7 +125,7 @@ def ssim(img1, img2, max_val=255, filter_size=11,
     v2 = sigma11 + sigma22 + c2
     if mask is not None:
         score = (((2.0 * mu12 + c1) * v1) / ((mu11 + mu22 + c1) * v2))
-        score = np.sum(mask * score) / (np.sum(mask*np.ones_like(score)))
+        score = np.sum(mask * score) / (np.sum(mask * np.ones_like(score)))
     else:
         score = np.mean((((2.0 * mu12 + c1) * v1) / ((mu11 + mu22 + c1) * v2)))
     # cs = np.mean(v1 / v2)
@@ -144,8 +142,8 @@ class LPIPSMetric:
 
     def eval_single_pair(self, img0, img1, max_val=255):
         # Load images
-        img0 = lpips.im2tensor(img0, factor=max_val/2.).to(self.device)
-        img1 = lpips.im2tensor(img1, factor=max_val/2.).to(self.device)
+        img0 = lpips.im2tensor(img0, factor=max_val / 2.).to(self.device)
+        img1 = lpips.im2tensor(img1, factor=max_val / 2.).to(self.device)
 
         # Compute distance
         with torch.no_grad():
@@ -154,7 +152,7 @@ class LPIPSMetric:
             else:
                 error = self.lpips_loss.forward(img0, img1).cpu().item()
         return error
-    
+
     def eval_single_pair_masked(self, img0, img1, mask, max_val=255):
         assert self.spatial, "spatial needs to be set True to run masked LPIPS."
         assert len(mask.shape) == 2, f"expected mask to be a 2D array, but got shape {mask.shape}"

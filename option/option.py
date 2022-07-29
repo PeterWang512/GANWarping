@@ -61,10 +61,10 @@ class BaseOptions():
         opt, unknown = parser.parse_known_args()
         opt = parser.parse_args()
 
-        # update the options 
+        # update the options
         self.parser = parser
         return opt
-    
+
     def update_parser(self, parser, opt):
         # modify model-related parser options
         model_name = opt.model
@@ -142,7 +142,6 @@ class BaseOptions():
         return opt
 
 
-
 class TrainOptions(BaseOptions):
     def __init__(self):
         super().__init__()
@@ -189,26 +188,26 @@ class AugmentedArgumentParser(argparse.ArgumentParser):
             print(self.custom_command)
             args = shlex.split(self.custom_command)[2:]
         return super().parse_args(args, namespace)
-    
+
     def parse_known_args(self, args=None, namespace=None):
         if args is None and hasattr(self, 'custom_command') and self.custom_command is not None:
             args = shlex.split(self.custom_command)[2:]
         return super().parse_known_args(args, namespace)
-    
+
     def add_argument(self, *args, **kwargs):
         """ Support for providing a new argument type called "str2bool"
-        
+
         Example:
         parser.add_argument("--my_option", type=util.str2bool, default=|bool|)
-        
+
         1. "python train.py" sets my_option to be |bool|
         2. "python train.py --my_option" sets my_option to be True
         3. "python train.py --my_option False" sets my_option to be False
         4. "python train.py --my_option True" sets my_options to be True
-        
+
         https://stackoverflow.com/a/43357954
         """
-        
+
         if 'type' in kwargs and kwargs['type'] == util.str2bool:
             if 'nargs' not in kwargs:
                 kwargs['nargs'] = "?"

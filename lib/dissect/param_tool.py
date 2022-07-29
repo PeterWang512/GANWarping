@@ -10,7 +10,7 @@ def get_params(net, update_layers, exclude_children=False):
     return update_params
 
 
-def get_params_from_module(module, prefix='', exclude_children=False): 
+def get_params_from_module(module, prefix='', exclude_children=False):
     """
     Return all parameters and their names in the module.
     Includes options to add prefix to all the names (useful when the module is not root).
@@ -29,7 +29,7 @@ def get_params_from_module(module, prefix='', exclude_children=False):
             continue
         pname = f'{prefix}.{name}'
         param_dict[pname] = param
-    
+
     return param_dict
 
 

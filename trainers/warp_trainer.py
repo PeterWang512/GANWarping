@@ -42,7 +42,7 @@ class WarpTrainer(BaseTrainer):
         return parser
 
     def __init__(self, opt):
-        if opt.cudnn_benchmark == True:
+        if opt.cudnn_benchmark:
             torch.backends.cudnn.benchmark = True
 
         self.model = models.create_model(opt)
@@ -75,7 +75,7 @@ class WarpTrainer(BaseTrainer):
         if self.opt.lambda_mse > 0:
             self.loss_mse = torch.nn.MSELoss()
         if self.opt.lambda_lpips > 0:
-            self.loss_lpips = lpips.LPIPS(net='vgg').to(self.model.device) # TODO: issues will happen here for data parallel
+            self.loss_lpips = lpips.LPIPS(net='vgg').to(self.model.device)  # TODO: issues will happen here for data parallel
 
     def train_one_step(self, data_i, total_steps_so_far):
         # get model output at the target layer
@@ -171,11 +171,10 @@ class WarpTrainer(BaseTrainer):
             metrics, visuals = self.evaluators.evaluate(models_to_eval, self.dataset)
             metrics['runtime'] = train_time
             self.visualizer.plot_current_summaries(metrics)
-            self.visualizer.display_current_results(step+1, visuals, disable_html=True)
+            self.visualizer.display_current_results(step + 1, visuals, disable_html=True)
 
-            runtime_file = os.path.join(self.opt.checkpoints_dir, self.opt.name, f"runtime.npy")
+            runtime_file = os.path.join(self.opt.checkpoints_dir, self.opt.name, f'{"runtime.npy"}')
             np.save(runtime_file, train_time)
-
 
     def adjust_learning_rate(self, step):
         if self.opt.lr_schedule == 'karras':
@@ -194,7 +193,6 @@ class WarpTrainer(BaseTrainer):
                 param_group['lr'] = lr
         else:
             raise KeyError(f"Unknown learning rate schedule: {self.opt.lr_schedule}")
-
 
     def get_visuals_for_snapshot(self, data_i):
         images = self.prepare_images(data_i)

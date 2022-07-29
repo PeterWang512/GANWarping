@@ -6,16 +6,16 @@ Image deformation using moving least squares.
     * Affine deformation
     * Similarity deformation
     * Rigid deformation
-For more details please reference the documentation: 
-    
+For more details please reference the documentation:
+
     Moving-Least-Squares/doc/Image Deformation.pdf
-or the original paper: 
-    
+or the original paper:
+
     Image deformation using moving least squares
-    Schaefer, Mcphail, Warren. 
+    Schaefer, Mcphail, Warren.
 Note:
     In the original paper, the author missed the weight w_j in formular (5).
-    In addition, all the formulars in section 2.1 miss the w_j. 
+    In addition, all the formulars in section 2.1 miss the w_j.
     And I have corrected this point in my documentation.
 @author: Jarvis ZHANG
 @date: 2017/8/8
@@ -24,18 +24,18 @@ Note:
 """
 
 import numpy as np
-from skimage.transform import rescale
 
 np.seterr(divide='ignore', invalid='ignore')
 
+
 def mls_affine_deformation_1pt(p, q, v, alpha=1):
-    ''' Calculate the affine deformation of one point.   
+    ''' Calculate the affine deformation of one point.
     This function is used to test the algorithm.
     '''
     ctrls = p.shape[0]
     np.seterr(divide='ignore')
     w = 1.0 / np.sum((p - v) ** 2, axis=1) ** alpha
-    w[w == np.inf] = 2**31-1
+    w[w == np.inf] = 2**31 - 1
     pstar = np.sum(p.T * w, axis=1) / np.sum(w)
     qstar = np.sum(q.T * w, axis=1) / np.sum(w)
     phat = p - pstar
@@ -73,7 +73,7 @@ def mls_affine_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
         parameter used by weights
     eps: float
         epsilon
-    
+
     Return
     ------
         A deformed image.
@@ -112,16 +112,16 @@ def mls_affine_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
 
     try:
         inv_pTwp = np.linalg.inv(pTwp.transpose(2, 3, 0, 1))                            # [grow, gcol, 2, 2]
-        flag = False                
-    except np.linalg.linalg.LinAlgError:                
-        flag = True             
+        flag = False
+    except np.linalg.linalg.LinAlgError:
+        flag = True
         det = np.linalg.det(pTwp.transpose(2, 3, 0, 1))                                 # [grow, gcol]
-        det[det < 1e-8] = np.inf                
+        det[det < 1e-8] = np.inf
         reshaped_det = det.reshape(1, 1, grow, gcol)                                    # [1, 1, grow, gcol]
         adjoint = pTwp[[[1, 0], [1, 0]], [[1, 1], [0, 0]], :, :]                        # [2, 2, grow, gcol]
         adjoint[[0, 1], [1, 0], :, :] = -adjoint[[0, 1], [1, 0], :, :]                  # [2, 2, grow, gcol]
         inv_pTwp = (adjoint / reshaped_det).transpose(2, 3, 0, 1)                       # [grow, gcol, 2, 2]
-    
+
     mul_left = reshaped_v - pstar                                                       # [2, grow, gcol]
     reshaped_mul_left = mul_left.reshape(1, 2, grow, gcol).transpose(2, 3, 0, 1)        # [grow, gcol, 1, 2]
     mul_right = np.multiply(reshaped_w, phat, out=phat)                                 # [ctrls, 2, 1, grow, gcol]
@@ -161,7 +161,7 @@ def mls_affine_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
 
 def mls_similarity_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
     """ Similarity deformation
-    
+
     Parameters
     ----------
     vx, vy: ndarray
@@ -174,7 +174,7 @@ def mls_similarity_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
         parameter used by weights
     eps: float
         epsilon
-    
+
     Return
     ------
         A deformed image.
@@ -193,7 +193,7 @@ def mls_similarity_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
     # Compute
     reshaped_p = p.reshape(ctrls, 2, 1, 1)                                              # [ctrls, 2, 1, 1]
     reshaped_v = np.vstack((vx.reshape(1, grow, gcol), vy.reshape(1, grow, gcol)))      # [2, grow, gcol]
-    
+
     w = 1.0 / (np.sum((reshaped_p - reshaped_v).astype(np.float32) ** 2, axis=1) + eps) ** alpha    # [ctrls, grow, gcol]
     w /= np.sum(w, axis=0, keepdims=True)                                               # [ctrls, grow, gcol]
 
@@ -204,7 +204,7 @@ def mls_similarity_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
     phat = reshaped_p - pstar                                                           # [ctrls, 2, grow, gcol]
     reshaped_phat = phat.reshape(ctrls, 1, 2, grow, gcol)                               # [ctrls, 1, 2, grow, gcol]
     reshaped_w = w.reshape(ctrls, 1, 1, grow, gcol)                                     # [ctrls, 1, 1, grow, gcol]
-    
+
     mu = np.zeros((grow, gcol), np.float32)
     for i in range(ctrls):
         mu += w[i] * (phat[i] ** 2).sum(0)
@@ -212,8 +212,8 @@ def mls_similarity_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
 
     vpstar = reshaped_v - pstar                                                         # [2, grow, gcol]
     reshaped_vpstar = vpstar.reshape(2, 1, grow, gcol)                                  # [2, 1, grow, gcol]
-    neg_vpstar_verti = vpstar[[1, 0],...]                                               # [2, grow, gcol]
-    neg_vpstar_verti[1,...] = -neg_vpstar_verti[1,...]                                  
+    neg_vpstar_verti = vpstar[[1, 0], ...]                                               # [2, grow, gcol]
+    neg_vpstar_verti[1, ...] = -neg_vpstar_verti[1, ...]
     reshaped_neg_vpstar_verti = neg_vpstar_verti.reshape(2, 1, grow, gcol)              # [2, 1, grow, gcol]
     mul_right = np.concatenate((reshaped_vpstar, reshaped_neg_vpstar_verti), axis=1)    # [2, 2, grow, gcol]
 
@@ -222,7 +222,7 @@ def mls_similarity_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
     qstar = np.zeros((2, grow, gcol), np.float32)
     for i in range(ctrls):
         qstar += w[i] * reshaped_q[i]                                                   # [2, grow, gcol]
-    
+
     # Get final image transfomer -- 3-D array
     temp = np.zeros((grow, gcol, 2), np.float32)
     for i in range(ctrls):
@@ -230,17 +230,17 @@ def mls_similarity_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
         neg_phat_verti[1] = -neg_phat_verti[1]
         reshaped_neg_phat_verti = neg_phat_verti.reshape(1, 2, grow, gcol)              # [1, 2, grow, gcol]
         mul_left = np.concatenate((reshaped_phat[i], reshaped_neg_phat_verti), axis=0)  # [2, 2, grow, gcol]
-        
-        A = np.matmul((reshaped_w[i] * mul_left).transpose(2, 3, 0, 1), 
+
+        A = np.matmul((reshaped_w[i] * mul_left).transpose(2, 3, 0, 1),
                       mul_right.transpose(2, 3, 0, 1))                                  # [grow, gcol, 2, 2]
-    
+
         qhat = reshaped_q[i] - qstar                                                    # [2, grow, gcol]
         reshaped_qhat = qhat.reshape(1, 2, grow, gcol).transpose(2, 3, 0, 1)            # [grow, gcol, 1, 2]
 
         # Get final image transfomer -- 3-D array
         temp += np.matmul(reshaped_qhat, A).reshape(grow, gcol, 2)                      # [grow, gcol, 2]
 
-    transformers = temp.transpose(2, 0, 1) / reshaped_mu  + qstar                       # [2, grow, gcol]
+    transformers = temp.transpose(2, 0, 1) / reshaped_mu + qstar                       # [2, grow, gcol]
 
     # Removed the points outside the border
     # transformers[transformers < 0] = 0
@@ -252,7 +252,7 @@ def mls_similarity_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
 
 def mls_rigid_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
     """ Rigid deformation
-    
+
     Parameters
     ----------
     vx, vy: ndarray
@@ -265,7 +265,7 @@ def mls_rigid_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
         parameter used by weights
     eps: float
         epsilon
-    
+
     Return
     ------
         A deformed image.
@@ -284,7 +284,7 @@ def mls_rigid_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
     # Compute
     reshaped_p = p.reshape(ctrls, 2, 1, 1)                                              # [ctrls, 2, 1, 1]
     reshaped_v = np.vstack((vx.reshape(1, grow, gcol), vy.reshape(1, grow, gcol)))      # [2, grow, gcol]
-    
+
     w = 1.0 / (np.sum((reshaped_p - reshaped_v).astype(np.float32) ** 2, axis=1) + eps) ** alpha    # [ctrls, grow, gcol]
     w /= np.sum(w, axis=0, keepdims=True)                                               # [ctrls, grow, gcol]
 
@@ -294,8 +294,8 @@ def mls_rigid_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
 
     vpstar = reshaped_v - pstar                                                         # [2, grow, gcol]
     reshaped_vpstar = vpstar.reshape(2, 1, grow, gcol)                                  # [2, 1, grow, gcol]
-    neg_vpstar_verti = vpstar[[1, 0],...]                                               # [2, grow, gcol]
-    neg_vpstar_verti[1,...] = -neg_vpstar_verti[1,...]                                  
+    neg_vpstar_verti = vpstar[[1, 0], ...]                                               # [2, grow, gcol]
+    neg_vpstar_verti[1, ...] = -neg_vpstar_verti[1, ...]
     reshaped_neg_vpstar_verti = neg_vpstar_verti.reshape(2, 1, grow, gcol)              # [2, 1, grow, gcol]
     mul_right = np.concatenate((reshaped_vpstar, reshaped_neg_vpstar_verti), axis=1)    # [2, 2, grow, gcol]
     reshaped_mul_right = mul_right.reshape(2, 2, grow, gcol)                            # [2, 2, grow, gcol]
@@ -305,7 +305,7 @@ def mls_rigid_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
     qstar = np.zeros((2, grow, gcol), np.float32)
     for i in range(ctrls):
         qstar += w[i] * reshaped_q[i]                                                   # [2, grow, gcol]
-    
+
     temp = np.zeros((grow, gcol, 2), np.float32)
     for i in range(ctrls):
         phat = reshaped_p[i] - pstar                                                    # [2, grow, gcol]
@@ -315,9 +315,9 @@ def mls_rigid_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
         neg_phat_verti[1] = -neg_phat_verti[1]
         reshaped_neg_phat_verti = neg_phat_verti.reshape(1, 2, grow, gcol)              # [1, 2, grow, gcol]
         mul_left = np.concatenate((reshaped_phat, reshaped_neg_phat_verti), axis=0)     # [2, 2, grow, gcol]
-        
-        A = np.matmul((reshaped_w * mul_left).transpose(2, 3, 0, 1), 
-                        reshaped_mul_right.transpose(2, 3, 0, 1))                       # [grow, gcol, 2, 2]
+
+        A = np.matmul((reshaped_w * mul_left).transpose(2, 3, 0, 1),
+                      reshaped_mul_right.transpose(2, 3, 0, 1))                       # [grow, gcol, 2, 2]
 
         qhat = reshaped_q[i] - qstar                                                    # [2, grow, gcol]
         reshaped_qhat = qhat.reshape(1, 2, grow, gcol).transpose(2, 3, 0, 1)            # [grow, gcol, 1, 2]
@@ -328,11 +328,11 @@ def mls_rigid_deformation(vy, vx, p, q, alpha=1.0, eps=1e-8):
     temp = temp.transpose(2, 0, 1)                                                      # [2, grow, gcol]
     normed_temp = np.linalg.norm(temp, axis=0, keepdims=True)                           # [1, grow, gcol]
     normed_vpstar = np.linalg.norm(vpstar, axis=0, keepdims=True)                       # [1, grow, gcol]
-    transformers = temp / normed_temp * normed_vpstar  + qstar                          # [2, grow, gcol]
+    transformers = temp / normed_temp * normed_vpstar + qstar                          # [2, grow, gcol]
 
     # Removed the points outside the border
     # transformers[transformers < 0] = 0
     # transformers[0][transformers[0] > grow - 1] = 0
     # transformers[1][transformers[1] > gcol - 1] = 0
-        
+
     return transformers

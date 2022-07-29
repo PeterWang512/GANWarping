@@ -8,13 +8,10 @@ set_requires_grad recursively sets requires_grad in module parameters.
 '''
 
 import torch
-import numpy
-import types
 import copy
 import inspect
-import types
 import contextlib
-from collections import OrderedDict, defaultdict
+from collections import OrderedDict
 
 
 class Trace(contextlib.AbstractContextManager):
@@ -66,7 +63,7 @@ class Trace(contextlib.AbstractContextManager):
                     retain_grad=False)  # retain_grad applies to output only.
             if edit_output:
                 output = invoke_with_optional_args(edit_output,
-                        output=output, layer=self.layer)
+                                                   output=output, layer=self.layer)
             if retain_output:
                 retainer.output = recursive_copy(
                     output, clone=clone, detach=detach, retain_grad=retain_grad)
@@ -75,7 +72,7 @@ class Trace(contextlib.AbstractContextManager):
                 # to follow without error.
                 if retain_grad:
                     output = recursive_copy(
-                            retainer.output, clone=True, detach=False)
+                        retainer.output, clone=True, detach=False)
             if stop:
                 raise StopForward()
             return output
@@ -124,15 +121,16 @@ class TraceDict(OrderedDict, contextlib.AbstractContextManager):
         self.stop = stop
         for i, layer in enumerate(layers):
             self[layer] = Trace(
-                    module=module,
-                    layer=layer,
-                    retain_output=retain_output,
-                    retain_input=retain_input,
-                    clone=clone,
-                    detach=detach,
-                    retain_grad=retain_grad,
-                    edit_output=edit_output,
-                    stop=stop and i == len(layers) - 1)
+                module=module,
+                layer=layer,
+                retain_output=retain_output,
+                retain_input=retain_input,
+                clone=clone,
+                detach=detach,
+                retain_grad=retain_grad,
+                edit_output=edit_output,
+                stop=stop and i == len(layers) - 1)
+
     def __enter__(self):
         return self
 
@@ -144,6 +142,7 @@ class TraceDict(OrderedDict, contextlib.AbstractContextManager):
     def close(self):
         for layer, trace in reversed(self.items()):
             trace.close()
+
 
 class StopForward(Exception):
     '''
@@ -206,11 +205,11 @@ def subsequence(sequential, first_layer=None, last_layer=None,
         first_layer = single_layer
         last_layer = single_layer
     first, last, after, upto = [
-            None if d is None else d.split('.')
-            for d in [first_layer, last_layer, after_layer, upto_layer]]
+        None if d is None else d.split('.')
+        for d in [first_layer, last_layer, after_layer, upto_layer]]
     return hierarchical_subsequence(
-            sequential, first=first, last=last,
-            after=after, upto=upto, share_weights=share_weights)
+        sequential, first=first, last=last,
+        after=after, upto=upto, share_weights=share_weights)
 
 
 def hierarchical_subsequence(sequential, first, last, after, upto,
@@ -239,7 +238,7 @@ def hierarchical_subsequence(sequential, first, last, after, upto,
         if name == F:
             first = None
             including_children = True
-        if name == A and AN is not None: # just like F if not a leaf.
+        if name == A and AN is not None:  # just like F if not a leaf.
             after = None
             including_children = True
         if name == U and UN is None:
@@ -248,18 +247,18 @@ def hierarchical_subsequence(sequential, first, last, after, upto,
         if including_children:
             # AR = full name for recursive descent if name matches.
             FR, LR, AR, UR = [
-                    n if n is None or n[depth] == name else None
-                    for n in [FN, LN, AN, UN]]
+                n if n is None or n[depth] == name else None
+                for n in [FN, LN, AN, UN]]
             chosen = hierarchical_subsequence(
-                    layer,
-                    first=FR, last=LR, after=AR, upto=UR,
-                    share_weights=share_weights, depth=depth + 1)
+                layer,
+                first=FR, last=LR, after=AR, upto=UR,
+                share_weights=share_weights, depth=depth + 1)
             if chosen is not None:
                 included_children[name] = chosen
         if name == L:
             last = None
             including_children = False
-        if name == U and UN is not None: # just like L if not a leaf.
+        if name == U and UN is not None:  # just like L if not a leaf.
             upto = None
             including_children = False
         if name == A and AN is None:
@@ -348,7 +347,7 @@ def invoke_with_optional_args(fn, *args, **kwargs):
     unmatched_pos = []
     used_pos = 0
     defaulted_pos = len(argspec.args) - (
-            0 if not argspec.defaults else len(argspec.defaults))
+        0 if not argspec.defaults else len(argspec.defaults))
     # Pass positional args that match name first, then by position.
     for i, n in enumerate(argspec.args):
         if n in kwargs:
@@ -360,7 +359,7 @@ def invoke_with_optional_args(fn, *args, **kwargs):
         else:
             unmatched_pos.append(len(pass_args))
             pass_args.append(None if i < defaulted_pos
-                    else argspec.defaults[i - defaulted_pos])
+                             else argspec.defaults[i - defaulted_pos])
     # Fill unmatched positional args with unmatched keyword args in order.
     if len(unmatched_pos):
         for k, v in kwargs.items():
@@ -374,12 +373,12 @@ def invoke_with_optional_args(fn, *args, **kwargs):
         else:
             if unmatched_pos[0] < defaulted_pos:
                 unpassed = ', '.join(argspec.args[u]
-                        for u in unmatched_pos if u < defaulted_pos)
+                                     for u in unmatched_pos if u < defaulted_pos)
                 raise TypeError(f'{fn.__name__}() cannot be passed {unpassed}.')
     # Pass remaining kw args if they can be accepted.
     pass_kw = {k: v for k, v in kwargs.items()
-            if k not in used_kw
-            and (k in argspec.kwonlyargs or argspec.varargs is not None)}
+               if k not in used_kw
+               and (k in argspec.kwonlyargs or argspec.varargs is not None)}
     # Pass remaining positional args if they can be accepted.
     if argspec.varargs is not None:
         pass_args = pass_args + list(args[used_pos:])

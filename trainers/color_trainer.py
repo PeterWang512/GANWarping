@@ -37,7 +37,7 @@ class ColorTrainer(BaseTrainer):
         return parser
 
     def __init__(self, opt):
-        if opt.cudnn_benchmark == True:
+        if opt.cudnn_benchmark:
             torch.backends.cudnn.benchmark = True
 
         self.model = models.create_model(opt)
@@ -80,14 +80,14 @@ class ColorTrainer(BaseTrainer):
         output = self.model(latents, mode='target')
 
         # get color supervision
-        color_mask = data_i['color_masks'][:,None,:,:].to(output.device)
+        color_mask = data_i['color_masks'][:, None, :, :].to(output.device)
         masked_output = output * color_mask
         color_target = data_i['colors'].to(output.device)
         with torch.no_grad():
             color_target = color_target * color_mask
 
         # get background color constraint
-        background_mask = data_i['background_masks'][:,None,:,:].to(output.device)
+        background_mask = data_i['background_masks'][:, None, :, :].to(output.device)
         background_output = output * background_mask
         with torch.no_grad():
             ref_output = self.ref_model(latents, mode='target')
@@ -164,8 +164,7 @@ class ColorTrainer(BaseTrainer):
             metrics, visuals = self.evaluators.evaluate(models_to_eval, self.dataset)
             metrics['runtime'] = train_time
             self.visualizer.plot_current_summaries(metrics)
-            self.visualizer.display_current_results(step+1, visuals, disable_html=True)
-
+            self.visualizer.display_current_results(step + 1, visuals, disable_html=True)
 
     def adjust_learning_rate(self, step):
         if self.opt.lr_schedule == 'karras':
@@ -184,7 +183,6 @@ class ColorTrainer(BaseTrainer):
                 param_group['lr'] = lr
         else:
             raise KeyError(f"Unknown learning rate schedule: {self.opt.lr_schedule}")
-
 
     def get_visuals_for_snapshot(self, data_i):
         images = self.prepare_images(data_i)
