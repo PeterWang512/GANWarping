@@ -1,5 +1,5 @@
 ## Rewriting Geometric Rules of a GAN
- [**Project**](https://peterwang512.github.io/GANWarping/) | [**Paper**]() | [**Youtube**](https://www.youtube.com/watch?v=2m7_rbsO6Hk)
+ [**Project**](https://peterwang512.github.io/GANWarping/) | [**Paper**](https://arxiv.org/abs/2207.14288) | [**Youtube**](https://www.youtube.com/watch?v=2m7_rbsO6Hk)
 
 
 <p align="center">
@@ -12,7 +12,7 @@ With our method, a user can edit a GAN model to synthesize many unseen objects w
 
 [Sheng-Yu Wang](https://peterwang512.github.io/)<sup>1</sup>, [David Bau](https://baulab.info/)<sup>2</sup>, [Jun-Yan Zhu](https://cs.cmu.edu/~junyanz)<sup>1</sup>.
 <br> CMU<sup>1</sup>, Northeastern University<sup>2</sup>
-<br>In [SIGGRAPH](), 2022.
+<br>In [SIGGRAPH](https://arxiv.org/abs/2207.14288), 2022.
 
 
 
