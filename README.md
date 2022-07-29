@@ -134,7 +134,7 @@ python test.py -t weights/eval_task
 * Y. Nitzan, K. Aberman, Q. He, O. Liba, M. Yarom, Y. Gandelsman, I. Mosseri, Y. Pritch, D. Cohen-or.
  ["MyStyle: A Personalized Generative Prior"](https://arxiv.org/abs/2203.17272). In ArXiv.
 * R. Gal, O. Patashnik, H. Maron, A. Bermano, G. Chechik, D. Cohen-Or. ["StyleGAN-NADA: CLIP-Guided Domain Adaptation of Image Generators."](https://arxiv.org/abs/2108.00946). In SIGGRAPH 2022.
-* S.-Y. Wang, D. Bau, J.-Y. Zhu. ["Sketch Your Own GAN"]([https://arxiv.org/abs/1912.05270](https://arxiv.org/abs/2108.02774). In ICCV 2021.
+* S.-Y. Wang, D. Bau, J.-Y. Zhu. ["Sketch Your Own GAN"](https://arxiv.org/abs/2108.02774). In ICCV 2021.
 * D. Bau, S. Liu, T. Wang, J.-Y. Zhu, A. Torralba. ["Rewriting a Deep Generative Model"](https://arxiv.org/abs/2007.15646). In ECCV 2020.
 
 
