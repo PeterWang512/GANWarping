@@ -110,7 +110,7 @@
     
     
         <title>Rewriting Geometric Rules of a GAN</title>
-        <meta property="og:image" content="http://cs.cmu.edu/~shengyu2/projects/GANSketch/files/thumbnail.jpg">
+        <meta property="og:image" content="http://peterwang512.github.io/GANWarping/files/thumbnail.png">
         <meta property="og:title" content="Rewriting Geometric Rules of a GAN">
       </head>
     
@@ -246,26 +246,58 @@
     
     
           <br><hr>
-    
+
+        <center><h2>Method</h2></center><table align="center" width="700" px="">
+            <p>A user first edits a handful of samples from the pre-trained generative model. We then train a customized model so that it can synthesize new samples with a similar visual effect specified by the user edit. To prevent overfitting, we apply style-mixing augmentation to the edited samples. For each sample, we mix the original latent code with a new randomly sampled texture latent code. Since the augmented samples still preserve shapes and poses, we can apply the same user edit to obtain a training set with diverse texture variations. We learn the customized model on the augmented training set using the LPIPS.</p>
+          <center>
+            <video width=100% height=100% muted autoplay controls preload="metadata" style="padding-top:8px">
+                <source src="files/method.mp4"
+                        type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+                  <!-- <img class="rounded" src="./files/teaser_video.mp4" width="1000px"> -->
+            </center>
+        <br><hr>
     
           <center><h2>Results</h2></center>
     
     
            <p align="center"><b>Warp edits.</b> Below we show warped models with different object categories.</p>
            
-           <center><img src="files/warp.jpg" width="800px"/></center>
+           <center>
+            <video width=100% height=100% muted autoplay controls preload="metadata" style="padding-top:8px">
+                <source src="files/warp.mp4"
+                        type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+                  <!-- <img class="rounded" src="./files/teaser_video.mp4" width="1000px"> -->
+            </center>
     
     
            <p align="center"><b>Color edits.</b> Our method can also be applied to color edits. The colored strokes specify the locations to perform coloring changes, while the darker region defines the region to be preserved. The edited models produce precise coloring changes in the specified parts.</p>
-           <center><img src="files/color.jpg" width="800px"/></center>
+           <center>
+            <video width=100% height=100% muted autoplay controls preload="metadata" style="padding-top:8px">
+                <source src="files/color.mp4"
+                        type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+                  <!-- <img class="rounded" src="./files/teaser_video.mp4" width="1000px"> -->
+            </center>
     
-           <p align="center"><b>Latent space edits.</b>  Our edited models can generate smooth transitions between two random samples by interpolating the latent space. We can also apply <a href="https://github.com/harskish/ganspace">GANSpace</a> edits to our models to change the object attributes such as poses or colors.</p>
+
+        <p align="center"><b>Compose edited models.</b> We can compose the edited models into a new model with aggregated geometric changes, by simpling blending the model weights linearly. We present an interface for users to easily create a new model by composing the edited models made beforehand. Please visit <a href="https://github.com/peterwang512/GANWarping/notebooks/compose_models.ipynb">this notebook</a> for more details. </p>
+        <center>
+            <video width=100% height=100% muted autoplay controls preload="metadata" style="padding-top:8px">
+                <source src="files/interface.mp4"
+                        type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+                  <!-- <img class="rounded" src="./files/teaser_video.mp4" width="1000px"> -->
+            </center>
+
+        <p align="center"><b>Latent space edits.</b>  Our edited models can generate smooth transitions between two random samples by interpolating the latent space. We can also apply <a href="https://github.com/harskish/ganspace">GANSpace</a> edits to our models to change the object attributes such as poses or colors.</p>
     
-           <center><img src="files/edit.jpg" width="800px"/></center>
-        
-        
-        <p align="center"><b>Compose edited models.</b> We can compose the edited models into a new model with aggregated geometric changes, by simpling blending the model weights linearly.</p>
-        <center><img src="files/compose.jpg" width="800px"/></center>
+        <center><img src="files/edit.jpg" width="800px"/></center>
     
     <br><hr>
     <table align="center" width="1000px">
