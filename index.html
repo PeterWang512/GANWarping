@@ -250,7 +250,7 @@
         <center><h2>Method</h2></center><table align="center" width="700" px="">
             <p>A user first edits a handful of samples from the pre-trained generative model. We then train a customized model so that it can synthesize new samples with a similar visual effect specified by the user edit. To prevent overfitting, we apply style-mixing augmentation to the edited samples. For each sample, we mix the original latent code with a new randomly sampled texture latent code. Since the augmented samples still preserve shapes and poses, we can apply the same user edit to obtain a training set with diverse texture variations. We learn the customized model on the augmented training set using the LPIPS.</p>
           <center>
-            <video width="720" muted autoplay controls preload="metadata">
+            <video width="720" muted controls preload="metadata">
                 <source src="files/method.mp4"
                         type="video/mp4">
                 Your browser does not support the video tag.
@@ -265,7 +265,7 @@
            <p align="center"><b>Warp edits.</b> Below we show warped models with different object categories.</p>
            
            <center>
-            <video width="720" muted autoplay controls preload="metadata">
+            <video width="720" muted controls preload="metadata">
                 <source src="files/warp.mp4"
                         type="video/mp4">
                 Your browser does not support the video tag.
@@ -276,7 +276,7 @@
     
            <p align="center"><b>Color edits.</b> Our method can also be applied to color edits. The colored strokes specify the locations to perform coloring changes, while the darker region defines the region to be preserved. The edited models produce precise coloring changes in the specified parts.</p>
            <center>
-            <video width="720" muted autoplay controls preload="metadata">
+            <video width="720" muted controls preload="metadata">
                 <source src="files/color.mp4"
                         type="video/mp4">
                 Your browser does not support the video tag.
@@ -287,7 +287,7 @@
 
         <p align="center"><b>Compose edited models.</b> We can compose the edited models into a new model with aggregated geometric changes, by simpling blending the model weights linearly. We present an interface for users to easily create a new model by composing the edited models made beforehand. Please visit <a href="https://github.com/PeterWang512/GANWarping/blob/main/notebooks/compose_models.ipynb">this notebook</a> for more details. </p>
         <center>
-            <video width="720" muted autoplay controls preload="metadata">
+            <video width="720" muted controls preload="metadata">
                 <source src="files/interface.mp4"
                         type="video/mp4">
                 Your browser does not support the video tag.
@@ -307,10 +307,10 @@
       <center><h2>Related works</h2></center>
     </left>
     <ul>
-      <li>R. Gal, O. Patashnik, H. Maron, A. Bermano, G. Chechik, D. Cohen-Or. <a href="https://arxiv.org/abs/2108.00946">"StyleGAN-NADA: CLIP-Guided Domain Adaptation of Image Generators."</a>. In SIGGRAPH 2022.</li><br>
-      <li>D. Bau, S. Liu, T. Wang, J.-Y. Zhu, A. Torralba. <a href="https://arxiv.org/abs/2007.15646">"Rewriting a Deep Generative Model"</a>. In ECCV 2020.</li><br>
-      <li>S.-Y. Wang, D. Bau, J.-Y. Zhu. <a href="https://arxiv.org/abs/2108.02774">"Sketch Your Own GAN"</a>. In ICCV 2021.</li><br>
       <li>Y. Nitzan, K. Aberman, Q. He, O. Liba, M. Yarom, Y. Gandelsman, I. Mosseri, Y. Pritch, D. Cohen-or. <a href="https://arxiv.org/abs/2203.17272">"MyStyle: A Personalized Generative Prior".</a>. In ArXiv.</li>
+      <li>R. Gal, O. Patashnik, H. Maron, A. Bermano, G. Chechik, D. Cohen-Or. <a href="https://arxiv.org/abs/2108.00946">"StyleGAN-NADA: CLIP-Guided Domain Adaptation of Image Generators."</a>. In SIGGRAPH 2022.</li><br>
+      <li>S.-Y. Wang, D. Bau, J.-Y. Zhu. <a href="https://arxiv.org/abs/2108.02774">"Sketch Your Own GAN"</a>. In ICCV 2021.</li><br>
+      <li>D. Bau, S. Liu, T. Wang, J.-Y. Zhu, A. Torralba. <a href="https://arxiv.org/abs/2007.15646">"Rewriting a Deep Generative Model"</a>. In ECCV 2020.</li><br>
     </ul>
     </td>
     </tr>
