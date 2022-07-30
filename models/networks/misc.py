@@ -16,13 +16,8 @@ def define_G(opt):
         raise KeyError(f"Unknown option archG: {opt.archG}")
 
 
-# def define_D(opt):
-#     discriminator = stylegan2.Discriminator(opt.size, channel_multiplier=opt.channel_multiplier)
-#     return discriminator
-
-
 def set_requires_grad(params, flag):
-    """ 
+    """
     For more efficient optimization, turn on and off
     recording of gradients for |params|.
     """
@@ -78,7 +73,7 @@ def get_module_resolution(archG, module_dict: OrderedDict):
 
 
 def get_stylegan3_module_res(module_dict):
-    assert type(module_dict) == OrderedDict, f"Expect module_dict to be OrderedDict, but get type {type(module_dict)}" 
+    assert type(module_dict) == OrderedDict, f"Expect module_dict to be OrderedDict, but get type {type(module_dict)}"
     module_list = list(module_dict.values())
     in_sizes = [mod.in_size[0] if hasattr(mod, 'in_size') else None for mod in module_list]
     out_sizes = [mod.out_size[0] if hasattr(mod, 'out_size') else None for mod in module_list]
@@ -86,7 +81,7 @@ def get_stylegan3_module_res(module_dict):
 
 
 def get_stylegan2_module_res(module_dict):
-    assert type(module_dict) == OrderedDict, f"Expect module_dict to be OrderedDict, but get type {type(module_dict)}" 
+    assert type(module_dict) == OrderedDict, f"Expect module_dict to be OrderedDict, but get type {type(module_dict)}"
     module_list = list(module_dict.values())
     in_sizes = [mod.resolution // mod.up if hasattr(mod, 'resolution') else None for mod in module_list]
     out_sizes = [mod.resolution if hasattr(mod, 'resolution') else None for mod in module_list]

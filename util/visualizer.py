@@ -59,10 +59,10 @@ class Visualizer():
     # |visuals|: dictionary of images to display or save
     def display_current_results(self, step, visuals, disable_html=False):
 
-        ## convert tensors to numpy arrays
+        # convert tensors to numpy arrays
         visuals = self.convert_visuals_to_numpy(visuals)
 
-        if self.wandb_log: # show images in tensorboard output
+        if self.wandb_log:  # show images in tensorboard output
             img_summaries = {}
             for label, image_numpy in visuals.items():
                 assert len(image_numpy.shape) == 3, "visualization should be be a single RGB image"
@@ -73,7 +73,7 @@ class Visualizer():
             # Write Summary
             wandb.log(img_summaries, step=step)
 
-        if self.use_html and not disable_html: # save images to a html file
+        if self.use_html and not disable_html:  # save images to a html file
             for label, image_numpy in visuals.items():
                 assert len(image_numpy.shape) == 3, "visualization should be be a single RGB image"
                 img_path = os.path.join(self.img_dir, 'iter%.3d_%s.png' % (step, label))
@@ -106,7 +106,7 @@ class Visualizer():
                 if len(ims) < 10:
                     webpage.add_images(ims, txts, links, height=self.win_size)
                 else:
-                    num = int(round(len(ims)/2.0))
+                    num = int(round(len(ims) / 2.0))
                     webpage.add_images(ims[:num], txts[:num], links[:num], height=self.win_size)
                     webpage.add_images(ims[num:], txts[num:], links[num:], height=self.win_size)
 

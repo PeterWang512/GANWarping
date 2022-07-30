@@ -80,5 +80,5 @@ class ColorDataset(BaseDataset):
     def get_length_from_dict(self):
         t = len(self.data['latents'])
         for v in self.data.values():
-            assert t == len(v), f"Length of each list in self.data should be equal."
+            assert t == len(v), "Length of each list in self.data should be equal."
         return t

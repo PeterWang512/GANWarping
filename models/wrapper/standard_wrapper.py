@@ -4,10 +4,11 @@ from lib.dissect.param_tool import get_params_from_module
 
 class StandardWrapper(BaseWrapper):
     """This wrapper takes in the module and apply low-rank update on the `.weight` parameter."""
+
     def __init__(self, module, module_name, only_weight=False):
         super().__init__(module, module_name, only_weight=only_weight)
 
-        # setup bookkeeping 
+        # setup bookkeeping
         self.module = module
         self.module_name = module_name
 

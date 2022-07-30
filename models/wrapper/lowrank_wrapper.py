@@ -5,13 +5,14 @@ from lib.dissect.param_tool import get_params_from_module
 
 class LowRankWrapper(BaseWrapper):
     """This wrapper takes in the module and apply low-rank update on the `.weight` parameter."""
+
     def __init__(self, module, module_name, context=None, rank=None, only_weight=True):
         assert context is not None or rank is not None, "need to specify either rank or context."
         if context is not None:
             assert context.shape[0] == rank, f"the rank of the context should match the specified rank {rank}, but got {context.shape[0]}."
         super().__init__(module, module_name, context=context, rank=None, only_weight=only_weight)
 
-        # setup bookkeeping 
+        # setup bookkeeping
         self.module = module
         self.module_name = module_name
         self.original_weight = module.weight
@@ -50,6 +51,7 @@ class LowRankWrapper(BaseWrapper):
 
         # update the temporary new forward with low rank updates
         self.cache_forward = self.module.forward
+
         def new_forward(*args, **kwargs):
             # weight_1 = weight_0 + Lambda D
             self.module.weight = self.original_weight + \
@@ -67,7 +69,7 @@ class LowRankWrapper(BaseWrapper):
         with torch.no_grad():
             # Fill in the learned weights
             new_weight = self.original_weight + \
-                 torch.einsum('odyx, di -> oiyx', self.lambda_param, self.context)
+                torch.einsum('odyx, di -> oiyx', self.lambda_param, self.context)
         self.save_params[f'{self.module_name}.weight'] = new_weight
         return self.save_params
 

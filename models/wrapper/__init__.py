@@ -18,7 +18,7 @@ def find_wrapper_using_name(wrapper_name):
     target_wrapper_name = wrapper_name.replace('_', '') + 'wrapper'
     for name, cls in wrapperlib.__dict__.items():
         if name.lower() == target_wrapper_name.lower() \
-            and issubclass(cls, BaseWrapper):
+                and issubclass(cls, BaseWrapper):
             wrapper = cls
 
     if wrapper is None:

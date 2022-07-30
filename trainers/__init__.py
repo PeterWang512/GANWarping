@@ -1,7 +1,5 @@
-import os
 import importlib
 from trainers.base_trainer import BaseTrainer
-import torch
 
 
 def find_trainer_using_name(trainer_name):

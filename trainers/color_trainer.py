@@ -37,8 +37,7 @@ class ColorTrainer(BaseTrainer):
         return parser
 
     def __init__(self, opt):
-        if opt.cudnn_benchmark:
-            torch.backends.cudnn.benchmark = True
+        torch.backends.cudnn.benchmark = opt.cudnn_benchmark
 
         self.model = models.create_model(opt)
         self.ref_model = ReferenceModel(opt)

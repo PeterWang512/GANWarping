@@ -13,7 +13,7 @@ from lib.mls import mls_affine_deformation
 
 
 def load_keypoints(path, w, h):
-    fixed_keypts = [[0, 0, 0, 0], [0, h-1, 0, h-1], [w-1, 0, w-1, 0], [w-1, h-1, w-1, h-1]]
+    fixed_keypts = [[0, 0, 0, 0], [0, h - 1, 0, h - 1], [w - 1, 0, w - 1, 0], [w - 1, h - 1, w - 1, h - 1]]
     keypoints = np.load(path)
     return np.concatenate([keypoints, fixed_keypts], axis=0)
 
@@ -42,9 +42,9 @@ def get_warp_grid(size, keypoints):
     # getting the deformation grid, singularities on the control point need extra care
     deform = mls_affine_deformation(vx, vy, src, tgt, alpha=1)
     deform = np.array(deform)
-    idx_i, idx_j = tgt[:,1].astype(int), tgt[:,0].astype(int)
+    idx_i, idx_j = tgt[:, 1].astype(int), tgt[:, 0].astype(int)
     deform[:, idx_i, idx_j] = src[:, ::-1].T
-    
+
     # mls_rigd_deformation output (y, x) grid, want to return (x, y) grid instead
     return deform[::-1, :, :]
 
@@ -55,8 +55,8 @@ def get_warp_grid_normalized(keypoints, image_res, target_res):
 
     # normalize grid range to [-1, 1]
     h, w = image_res
-    vgrid[0,:,:] = 2.0*vgrid[0,:,:] / max(w-1,1) - 1.0
-    vgrid[1,:,:] = 2.0*vgrid[1,:,:] / max(h-1,1) - 1.0
+    vgrid[0, :, :] = 2.0 * vgrid[0, :, :] / max(w - 1, 1) - 1.0
+    vgrid[1, :, :] = 2.0 * vgrid[1, :, :] / max(h - 1, 1) - 1.0
 
     # Transpose to [x, y, flow] and resize the flow to target resolution
     vgrid = vgrid.transpose((1, 2, 0))
@@ -76,7 +76,7 @@ def warp_by_keypoints(image, keypoints, interp=cv2.INTER_CUBIC):
     warped = cv2.remap(image, dx, dy, interp, borderMode=cv2.BORDER_REFLECT)
     if is_pil:
         warped = Image.fromarray(warped)
-    
+
     return warped
 
 
@@ -89,7 +89,7 @@ def visualize_features(feats):
             channel = (channel - min_val) / (max_val - min_val)
             channel = channel * 2 - 1
             processed.append(channel)
-    return torch.stack(processed)[:,None,:,:]
+    return torch.stack(processed)[:, None, :, :]
 
 
 def visualize_features_magnitude(feats):
@@ -101,7 +101,7 @@ def visualize_features_magnitude(feats):
         feat = (feat - min_val) / (max_val - min_val)
         feat = feat * 2 - 1
         processed.append(feat)
-    return torch.stack(processed)[:,None,:,:]
+    return torch.stack(processed)[:, None, :, :]
 
 
 def fig2img(fig):
@@ -220,7 +220,6 @@ def tensor2im(image_tensor, imtype=np.uint8, normalize=True, tile=2):
 
     if len(image_tensor.shape) == 2:
         assert False
-        #imagce_tensor = image_tensor.unsqueeze(0)
     image_numpy = image_tensor.detach().cpu().numpy() if type(image_tensor) is not np.ndarray else image_tensor
     if normalize:
         image_numpy = (np.transpose(image_numpy, (1, 2, 0)) + 1) / 2.0 * 255.0

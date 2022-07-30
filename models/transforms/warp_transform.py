@@ -12,14 +12,14 @@ class WarpTransform(nn.Module):
         if self.warp_cropped_car:
             B, C, H, W = x.shape
             black = -torch.ones_like(x)
-            x = x[:, :, H//8:7*H//8, :]
+            x = x[:, :, H // 8:7 * H // 8, :]
 
         deform = data['warp_grid'].to(x.device).type(x.type())
         warped = nn.functional.grid_sample(x, deform, align_corners=False, padding_mode="reflection")
 
         # paste the warped car back into the black canvas
         if self.warp_cropped_car:
-            black[:, :, H//8:7*H//8, :] = warped
+            black[:, :, H // 8:7 * H // 8, :] = warped
             warped = black
 
         return warped

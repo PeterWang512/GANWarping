@@ -16,7 +16,7 @@ def find_transform_using_name(transform_name):
     target_transform_name = transform_name.replace('_', '') + 'transform'
     for name, cls in transformlib.__dict__.items():
         if name.lower() == target_transform_name.lower() \
-            and issubclass(cls, torch.nn.Module):
+                and issubclass(cls, torch.nn.Module):
             transform = cls
 
     if transform is None:
