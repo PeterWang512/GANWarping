@@ -212,6 +212,12 @@
     
             <center><h2>Abstract</h2></center>
             Deep generative models make visual content creation more accessible to novice users by automating the synthesis of diverse, realistic content based on a collected dataset. However, the current machine learning approaches miss a key element of the creative process -- the ability to synthesize things that go far beyond the data distribution and everyday experience. To begin to address this issue, we enable a user to "warp" a given model by editing just a handful of original model outputs with desired geometric changes. Our method applies a low-rank update to a single model layer to reconstruct edited examples. Furthermore, to combat overfitting, we propose a latent space augmentation method based on style-mixing. Our method allows a user to create a model that synthesizes endless objects with defined geometric changes, enabling the creation of a new generative model without the burden of curating a large-scale dataset. We also demonstrate that edited models can be composed to achieve aggregated effects, and we present an interactive interface to enable users to create new models through composition. Empirical measurements on multiple test cases suggest the advantage of our method against recent GAN fine-tuning methods. Finally, we showcase several applications using the edited models, including latent space interpolation and image editing. <br>
+
+            <hr><center><h2>Comparison with text-to-image model</h2></center>
+            Our method enables editing modalities that are difficult to be described by text. It is unnatural to describe the warping edits precisely using text. To showcase this, we compare our edited models with DALLE-2. Here we attempted to provide the text prompts that best match the warping edits. Despite this, we observe that DALLE-2 leads to unintended color and texture changes, while our method yields consistent shape changes throughout all model samples.<br><br>
+            <center><img src="files/dalle-rabbit.png" width="800px"/></center> <hr>
+            <center><img src="files/dalle-alien.png" width="800px"/></center>
+            <br>
     
             <hr><center><h2 id="slides_video">Video</h2></center>
             <p align="center">
